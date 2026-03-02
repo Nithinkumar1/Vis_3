@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Homework #5: Custom Visualization Design
 
 In this homework, you will create a custom visualization as part of a museum exhibit, that is considered either "modded," "combinatorial," or "novel," according to the classifications laid out in the [Elijah Meek&#39;s article](https://medium.com/@Elijah_Meeks/defining-custom-data-visualization-c20a64746d08). **This assignment is worth 10 points.**
@@ -43,3 +44,6 @@ There are five datasets available for this homework (choose one).
 * When you finish your 'exhibit', take a screenshot of your page and name it `asurite.png` after your ASURITE. (For example, mine would be `cbryan16.png`.) Include this png file in the base folder of your submission.
 
 You are free (and encouraged!) to be creative on this assignment, including the use of abstract, artistic, thematic, esoteric, evocative, atmospheric, and illustrative designs. Don't submit just a basic D3 block (bar chart, scatterplot, pie/donut chart, line chart, node-link diagram, tree, etc.), or you'll receive a 0 (or significant deduction)on this assignment. Especially creative or interesting submissions are eligible for up to 2 points extra credit.
+=======
+# Vis_3
+>>>>>>> f876529544a665f4adeae29215437836fe98c150
