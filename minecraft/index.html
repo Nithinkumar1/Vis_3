@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Minecraft • Food: Hearts & Hunger (Remix)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="nsurine1.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<header id="banner">
+  <h1 class="title">Homework #5: Custom Visualization Design</h1>
+  <h2 class="subtitle dark-ink">Nithin Kumar Surineni • nsurine1@asu.edu</h2>
+</header>
+
+<main id="root">
+  <svg id="dashboard" width="1180" height="700" role="img" aria-label="Minecraft food hearts exhibit (remixed)">
+    <defs>
+      <pattern id="pxGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+        <rect width="16" height="16" fill="transparent"></rect>
+        <path d="M0 16 H16 M16 0 V16" stroke="rgba(255,255,255,0.05)" stroke-width="1"></path>
+      </pattern>
+      <linearGradient id="panelFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="#0b1318" stop-opacity="0.97"/>
+        <stop offset="100%" stop-color="#0b1419" stop-opacity="0.9"/>
+      </linearGradient>
+      <mask id="roundMask">
+        <rect x="0" y="0" width="1180" height="700" rx="22" fill="white"/>
+        <circle cx="590" cy="390" r="230" fill="black"/>
+      </mask>
+      <radialGradient id="rimGlow" cx="50%" cy="55%" r="52%">
+        <stop offset="83%" stop-color="rgba(255,255,255,0.12)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+      <filter id="softDrop" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="b"/>
+        <feOffset dy="2" result="o"/>
+        <feColorMatrix in="o" type="matrix"
+          values="0 0 0 0 0
+                  0 0 0 0 0
+                  0 0 0 0 0
+                  0 0 0 .35 0" result="s"/>
+        <feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="dropLite" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity=".35"/>
+      </filter>
+      <linearGradient id="chipFill" x1="0" x2="1">
+        <stop offset="0%" stop-color="#13232b"/>
+        <stop offset="100%" stop-color="#0f1c21"/>
+      </linearGradient>
+    </defs>
+
+    <rect x="0" y="0" width="1180" height="700" rx="22"
+          fill="url(#panelFill)" mask="url(#roundMask)"></rect>
+    <rect x="0" y="0" width="1180" height="700" rx="22"
+          fill="url(#pxGrid)" mask="url(#roundMask)"></rect>
+    <rect class="panel-outline" x="0.5" y="0.5" width="1179" height="699" rx="22"></rect>
+    <circle cx="590" cy="390" r="232" fill="url(#rimGlow)"></circle>
+
+    <g id="controls" transform="translate(32,26)">
+      <rect class="chip" x="0" y="0" width="370" height="36" rx="12"></rect>
+      <text class="chipLabel" x="16" y="24">Sort</text>
+      <g class="chipBtn" id="btnSortHearts" transform="translate(82,4)">
+        <rect class="chipBtnBg" rx="8" width="110" height="28"></rect>
+        <text class="chipBtnText" x="55" y="14" text-anchor="middle" dominant-baseline="middle">Heart</text>
+      </g>
+      <g class="chipBtn" id="btnSortHunger" transform="translate(198,4)">
+        <rect class="chipBtnBg" rx="8" width="110" height="28"></rect>
+        <text class="chipBtnText" x="55" y="14" text-anchor="middle" dominant-baseline="middle">Hunger</text>
+      </g>
+    </g>
+
+    <g id="rowHearts" transform="translate(230,110)">
+      <text class="rowHdr" x="-160" y="22">HEALTH</text>
+    </g>
+    <g id="rowHunger" transform="translate(230,170)">
+      <text class="rowHdr" x="-160" y="22">HUNGER</text>
+    </g>
+    <g id="rowSatFX" transform="translate(230,170)"></g>
+
+    <ellipse cx="590" cy="545" rx="105" ry="20" fill="rgba(0,0,0,0.35)" filter="url(#softDrop)"></ellipse>
+    <image id="avatar" href="Technoblade_skin.png"
+           x="410" y="210" width="360" height="360"
+           preserveAspectRatio="xMidYMid meet"></image>
+
+    <g id="foodCard" transform="translate(1100,210)">
+      <rect class="foodCardBg" x="-80" y="-70" width="160" height="140" rx="12"></rect>
+      <image id="foodSprite" href="" x="-60" y="-60" width="120" height="120"
+             preserveAspectRatio="xMidYMid meet" opacity="0" pointer-events="none"></image>
+    </g>
+
+    <g id="chips" transform="translate(940,26)">
+      <g class="mchip" transform="translate(0,0)">
+        <rect class="mchipBg" rx="10" width="210" height="36"></rect>
+        <text id="chipHearts" class="mchipText"
+              x="105" y="18" text-anchor="middle" dominant-baseline="middle">Hearts/item: –</text>
+      </g>
+      <g class="mchip" transform="translate(0,44)">
+        <rect class="mchipBg" rx="10" width="210" height="36"></rect>
+        <text id="chipHunger" class="mchipText"
+              x="105" y="18" text-anchor="middle" dominant-baseline="middle">Hunger: –</text>
+      </g>
+    </g>
+
+    <g id="infoBadge" transform="translate(960,470)" filter="url(#dropLite)">
+      <rect class="badge" x="-170" y="-90" width="340" height="190" rx="12"></rect>
+      <text id="txtName" class="foodName" text-anchor="middle" y="-40"></text>
+      <text id="txtType" class="meta" text-anchor="middle" y="-12"></text>
+      <text id="txtStats" class="meta" text-anchor="middle" y="14"></text>
+      <text id="txtNeeded" class="need" text-anchor="middle" y="48"></text>
+    </g>
+
+    <g id="barHunger" transform="translate(230,630)">
+      <text class="barLabel" x="-140" y="-14">HUNGER/ITEM</text>
+      <rect class="barBg" x="0" y="-30" width="460" height="14" rx="2"></rect>
+      <rect id="fillHunger" class="barFill hunger" x="0" y="-30" width="0" height="14" rx="2"></rect>
+    </g>
+
+    <g id="btnPrev" class="nav" transform="translate(44,360)" tabindex="0" role="button" aria-label="Previous">
+      <rect class="navBtn" x="0" y="-28" width="68" height="56" rx="8"></rect>
+      <text class="navText" x="34" y="6">◀</text>
+    </g>
+    <g id="btnNext" class="nav" transform="translate(1068,360)" tabindex="0" role="button" aria-label="Next">
+      <rect class="navBtn" x="0" y="-28" width="68" height="56" rx="8"></rect>
+      <text class="navText" x="34" y="6">▶</text>
+    </g>
+  </svg>
+  <g id="hint" style="display:none;" pointer-events="none">
+    <rect id="hintBg" class="tipBg" x="0" y="0" rx="8" width="280" height="54"></rect>
+    <text id="hintT1" class="tipText" x="14" y="22"></text>
+    <text id="hintT2" class="tipText" x="14" y="40"></text>
+  </g>
+
+ <section id="writeup" class="card">
+      <details open>
+        <summary>About this Exhibit — Design, Method & Category</summary>
+        <div class="content">
+          <p><strong>Goal.</strong> Help museum visitors decide “Which Minecraft food is best?” by showing how each item contributes to <em>hearts</em> (health proxy), <em>hunger</em>, <!-- and <em>saturation</em>,--> and how many items reach full 20 hearts.</p>
+
+          <p><strong>Dataset.</strong> <code>Food.csv</code> (Minecraft foods). We use attributes <code>name</code>, <code>type</code>, <code>hunger</code>,<!-- <code>saturation</code>-->, and (if present) <code>hearts</code>/<code>heal</code>. If hearts are missing, we visualize a clear exhibit proxy: <code>hearts ≈ hunger × 0.5</code>.</p>
+
+          <p><strong>Marks & Channels.</strong>
+            <ul>
+              <li><em>Heart glyph row</em> — mark: PNG heart/drumstick icons; channels: <u>count</u> (full/half/empty), <u>order</u> (left→right), <u>opacity</u> (overlay for state).</li>
+              <li><em>Bars</em> — mark: length bars; channels: <u>length</u> for hunger magnitudes.</li>
+              <li><em>Badge</em> — text marks for name/type + computed <em>items to full</em>.</li>
+              <li><em>Avatar window</em> — contextual anchor (no data encoding) that increases engagement.</li>
+            </ul>
+          </p>
+
+          <p><strong>Interactions.</strong> Left/right arrows & keyboard to browse foods; <em>Sort</em> toolbar to reorder by Hearts or Hunger; metric chips update live.</p>
+
+          <p><strong>Custom Visualization Category.</strong> <em>Combinatorial</em> — a non-standard composition combining:
+            heart/drumstick icon rows (custom glyphs), quantitative bars, avatar cut-out scene, and narrative controls in one graphic.</p>
+
+          <p><strong>Why it’s custom.</strong> This is not a stock chart; it fuses multiple encodings into a themed, single-canvas museum layout with tailored iconography and a masked avatar window.</p>
+
+          <p><strong>Notes.</strong> The exhibit focuses on ≥30 items (full CSV). If you place PNGs in <code>foods/</code> (slug of item name), the item art appears automatically.</p>
+        </div>
+      </details>
+    </section>
+</main>
+
+<script src="nsurine1.js"></script>
+</body>
+</html>
